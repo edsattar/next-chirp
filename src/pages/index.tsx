@@ -6,9 +6,8 @@ import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
-
   const user = useUser();
-
+  const { data } = api.posts.getAll.useQuery();
   return (
     <>
       <Head>
@@ -18,9 +17,14 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <h1 className="text-6xl font-bold text-white">
-        {user && <SignOutButton />}
-        {!user && <SignInButton />}
+          {user && <SignOutButton />}
+          {!user && <SignInButton />}
         </h1>
+        <div className="text-3xl text-white">
+          {data?.map((post) => (
+            <div key={post.id}>{post.content}</div>
+          ))}
+        </div>
       </main>
     </>
   );
